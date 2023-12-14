@@ -1,0 +1,8 @@
+uvicorn main:app --reload - Запуск сервера
+
+alembic init migrations - Инициализация миграций
+alembic revision --autogenerate -m "NAME" - Создание миграции(не создание таблиц)
+alembic upgrade "HASH" - До какой версии хотим обновить бд
+alembic upgrade head
+
+poetry init - уже в существующем проекте
