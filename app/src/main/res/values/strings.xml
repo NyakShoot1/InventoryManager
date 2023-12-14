@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">StorageService</string>
+
+    <string name="storage_label">Склад</string>
+    <string name="storage_movement_label">Перемещения на складе</string>
+    <string name="get_delivery_label">Приёмка</string>
+    <string name="reports_label">Отчёты</string>
+    <string name="received_delivery">Принятые поставки</string>
+    <string name="completed_orders">Выполненные отгрузки</string>
+    <string name="goods_on_storage">Товары на складе</string>
+    <string name="phys_places_on_storage">Физ. места на складе</string>
+    <string name="inside_storage_movement">Внутреннее</string>
+    <string name="outside_storage_movement">Внешнее</string>
+    <string name="requests_storage_movement">Запросы</string>
+    <string name="create_request_storage_movement">Новый запрос на перемещение товара</string>
+    <string name="get_delivery">Принять поставку</string>
+    <string name="write_downs">Списание</string>
+
+</resources>
