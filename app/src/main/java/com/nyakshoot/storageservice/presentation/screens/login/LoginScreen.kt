@@ -37,33 +37,36 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nyakshoot.storageservice.R
 import com.nyakshoot.storageservice.presentation.navigation.Screen
-import com.nyakshoot.storageservice.utils.State
+import com.nyakshoot.storageservice.utils.Resource
 
 @Composable
-fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltViewModel()
+fun LoginScreen(
+    navController: NavController,
+    viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
 
-    val authState by viewModel.authState.collectAsState() // состояние авторизации
+    val authState by viewModel.authResource.collectAsState() // состояние авторизации
     val needAuthState by viewModel.needAuth.collectAsState() // проверка, имеется ли токены (переместить в сплэш скрин и сделать норм проверку по токенам)
 
     LaunchedEffect(needAuthState.status) {
         viewModel.checkTokens()
-        when(needAuthState.status) {
-            State.Status.SUCCESS -> {
+        when (needAuthState.status) {
+            Resource.Status.SUCCESS -> {
                 navController.navigate(Screen.MainMenu.route) {
                     popUpTo(Screen.Login.route) {
                         inclusive = true
                     }
                 }
             }
-            State.Status.ERROR -> {}
-            State.Status.LOADING -> {}
+
+            Resource.Status.ERROR -> {}
+            Resource.Status.LOADING -> {}
         }
     }
 
     when (authState.status) {
-        State.Status.SUCCESS -> {
+        Resource.Status.SUCCESS -> {
             navController.navigate(Screen.MainMenu.route) {
                 popUpTo(Screen.Login.route) {
                     inclusive = true
@@ -71,12 +74,13 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
             }
             viewModel.updateAuthState()
         }
-        State.Status.ERROR -> {
+
+        Resource.Status.ERROR -> {
             Toast.makeText(context, authState.message, Toast.LENGTH_SHORT).show()
             viewModel.updateAuthState()
         }
 
-        State.Status.LOADING -> {}
+        Resource.Status.LOADING -> {}
     }
 
     Column(
@@ -91,7 +95,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = "Inventory Manager",
+            text = "Склад+",
             color = MaterialTheme.colors.primary,
             fontSize = 24.sp
         )
@@ -102,10 +106,11 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
             fontSize = 24.sp
         )
         Spacer(modifier = Modifier.height(20.dp))
-        Text(text = viewModel.loginState.errorMessageInput?: "", color = Color.Red)
+        Text(text = viewModel.loginState.errorMessageInput ?: "", color = Color.Red)
 
 
-        TextField(value = viewModel.loginState.loginInput, onValueChange = { viewModel.onEmailInputChange(it) },
+        TextField(value = viewModel.loginState.loginInput,
+            onValueChange = { viewModel.onEmailInputChange(it) },
             placeholder = {
                 Text(
                     text = "Логин",
@@ -126,14 +131,13 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                 )
             },
             trailingIcon = {
-                if(viewModel.loginState.isPasswordShown) {
+                if (viewModel.loginState.isPasswordShown) {
                     Icon(
                         imageVector = Icons.Outlined.RemoveRedEye,
                         contentDescription = "скрыть пароль",
                         modifier = Modifier.clickable { viewModel.onToggleVisualTransformation() }
                     )
-                }
-                else {
+                } else {
                     Icon(
                         imageVector = Icons.Outlined.VisibilityOff,
                         contentDescription = "показать пароль",
@@ -141,7 +145,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                     )
                 }
             },
-            visualTransformation = if(viewModel.loginState.isPasswordShown) VisualTransformation.None else PasswordVisualTransformation()
+            visualTransformation = if (viewModel.loginState.isPasswordShown) VisualTransformation.None else PasswordVisualTransformation()
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -150,7 +154,10 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                 .height(65.dp)
                 .width(245.dp),
             onClick = {
-                viewModel.authorize(viewModel.loginState.loginInput, viewModel.loginState.passwordInput)
+                viewModel.authorize(
+                    viewModel.loginState.loginInput,
+                    viewModel.loginState.passwordInput
+                )
 
             }) {
             Text(

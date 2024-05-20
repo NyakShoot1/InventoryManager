@@ -12,8 +12,9 @@
     <string name="inside_storage_movement">Внутреннее</string>
     <string name="outside_storage_movement">Внешнее</string>
     <string name="requests_storage_movement">Запросы</string>
-    <string name="create_request_storage_movement">Новый запрос на перемещение товара</string>
+    <string name="create_request_storage_movement">Новый запрос</string>
     <string name="get_delivery">Принять поставку</string>
     <string name="write_downs">Списание</string>
+    <string name="goods_base">База товаров</string>
 
 </resources>

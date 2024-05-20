@@ -14,11 +14,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainMenuViewModel @Inject constructor(
-): ViewModel() {
+) : ViewModel()
+{
 
     // ui стейт
     var mainMenuState by mutableStateOf(MainMenuState())
         private set
+
     fun generateAvailableItems(navController: NavController) {
         mainMenuState = mainMenuState.copy(availableItems = prepareAllItems(navController))
     }
@@ -28,20 +30,37 @@ class MainMenuViewModel @Inject constructor(
             MainMenuItemModel(
                 label = R.string.received_delivery,
                 iconId = R.drawable.delivered_box_verification
-            ) { Log.d("${R.string.received_delivery}", "Кнопка нажата") },
+            ) {
+
+                Log.d("${R.string.received_delivery}", "Кнопка нажата")
+            },
+
             MainMenuItemModel(
                 label = R.string.completed_orders,
                 iconId = R.drawable.delivery_truck
-            ) { Log.d("${R.string.completed_orders}", "Кнопка нажата") },
+            ) { Log.d("${R.string.completed_orders}", "Кнопка нажата")
+              },
+
             MainMenuItemModel(
                 label = R.string.goods_on_storage,
                 iconId = R.drawable.boxes_inside_a_storage
-            ) { Log.d("${R.string.goods_on_storage}", "Кнопка нажата") },
+            ) { Log.d("${R.string.goods_on_storage}", "Кнопка нажата")
+              },
 
             MainMenuItemModel(
                 label = R.string.phys_places_on_storage,
-                iconId = R.drawable.placeholder_on_map
-            ) { Log.d("${R.string.phys_places_on_storage}", "Кнопка нажата") }
+                iconId = R.drawable.placeholder_on_map,
+            ) { Log.d("${R.string.phys_places_on_storage}", "Кнопка нажата")
+              },
+
+            MainMenuItemModel(
+                label = R.string.goods_base,
+                iconId = R.drawable.boxes_inside_a_storage,
+            ) {
+                navController.navigate(Screen.ItemBase.route)
+                Log.d("${R.string.goods_base}", "Кнопка нажата")
+            },
+
         )
     }
 
@@ -49,20 +68,23 @@ class MainMenuViewModel @Inject constructor(
         return listOf(
             MainMenuItemModel(
                 label = R.string.inside_storage_movement,
-                iconId = R.drawable.packages_transportation
-            ) { Log.d("${R.string.inside_storage_movement}", "Кнопка нажата")},
+                iconId = R.drawable.packages_transportation,
+            ) { Log.d("${R.string.inside_storage_movement}", "Кнопка нажата") },
             MainMenuItemModel(
                 label = R.string.outside_storage_movement,
                 iconId = R.drawable.delivery_truck_with_packages
-            ) { Log.d("${R.string.outside_storage_movement}", "Кнопка нажата")},
+            ) { Log.d("${R.string.outside_storage_movement}", "Кнопка нажата") },
             MainMenuItemModel(
                 label = R.string.requests_storage_movement,
                 iconId = R.drawable.logistics_delivery_truck
-            ) { Log.d("${R.string.requests_storage_movement}", "Кнопка нажата")},
+            ) { Log.d("${R.string.requests_storage_movement}", "Кнопка нажата") },
             MainMenuItemModel(
                 label = R.string.create_request_storage_movement,
                 iconId = R.drawable.logistics_truck
-            ) { Log.d("${R.string.create_request_storage_movement}", "Кнопка нажата")}
+            ) {
+                navController.navigate(Screen.CreateMovement.route)
+                Log.d("${R.string.create_request_storage_movement}", "Кнопка нажата")
+            }
         )
     }
 
@@ -71,7 +93,10 @@ class MainMenuViewModel @Inject constructor(
             MainMenuItemModel(
                 label = R.string.get_delivery,
                 iconId = R.drawable.clipboard_verification
-            ) { navController.navigate(Screen.InputDeliveryData.route)})
+            ) {
+                navController.navigate(Screen.InputDeliveryData.route)
+            }
+        )
     }
 
     private fun prepareReportItems(navController: NavController): List<MainMenuItemModel> {
@@ -79,7 +104,7 @@ class MainMenuViewModel @Inject constructor(
             MainMenuItemModel(
                 label = R.string.write_downs,
                 iconId = R.drawable.recycle
-            ) { Log.d("${R.string.write_downs}", "Кнопка нажата")})
+            ) { Log.d("${R.string.write_downs}", "Кнопка нажата") })
     }
 
     private fun prepareAllItems(navController: NavController): List<List<MainMenuItemModel>> {

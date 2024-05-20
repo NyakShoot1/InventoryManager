@@ -11,7 +11,7 @@ import com.nyakshoot.storageservice.data.local.TokenManager
 import com.nyakshoot.storageservice.domain.model.LoginInputValidationType
 import com.nyakshoot.storageservice.domain.repository.IAuthRepository
 import com.nyakshoot.storageservice.domain.use_case.ValidateLoginInputUseCase
-import com.nyakshoot.storageservice.utils.State
+import com.nyakshoot.storageservice.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,12 +27,13 @@ class LoginViewModel @Inject constructor(
 ): ViewModel() {
 
     // для выполнения авторизации
-    private val _authState = MutableStateFlow<State<AuthResponseDTO>>(State.loading(null))
-    val authState: StateFlow<State<AuthResponseDTO>> = _authState
+    private val _authResource = MutableStateFlow<Resource<AuthResponseDTO>>(Resource.loading(null))
+    val authResource: StateFlow<Resource<AuthResponseDTO>> = _authResource
 
     // проверка по токенам: нужна ли авторизация вообще
-    private val _needAuth = MutableStateFlow<State<Boolean>>(State.loading(null))
-    val needAuth: StateFlow<State<Boolean>> = _needAuth
+    // TODO проверка валидности токена
+    private val _needAuth = MutableStateFlow<Resource<Boolean>>(Resource.loading(null))
+    val needAuth: StateFlow<Resource<Boolean>> = _needAuth
 
     // ui стейт
     var loginState by mutableStateOf(LoginState())
@@ -58,22 +59,22 @@ class LoginViewModel @Inject constructor(
 
     /** метод авторизации */
     fun authorize(login: String, password: String) = viewModelScope.launch {
-        _authState.value = State(State.Status.LOADING, null, "")
+        _authResource.value = Resource(Resource.Status.LOADING, null, "")
         val authInfo = AuthRequestDTO(login, password)
         val authResponse = iAuthRepository.authorize(authInfo)
-        if (authResponse.status == State.Status.SUCCESS) {
+        if (authResponse.status == Resource.Status.SUCCESS) {
             val nonNullAuthResponseData = authResponse.data ?: return@launch
-            _authState.value = authResponse
+            _authResource.value = authResponse
             setTokens(nonNullAuthResponseData)
         }
         else {
-            _authState.value = State(State.Status.ERROR, null,"Проверьте логин\\пароль")
+            _authResource.value = Resource(Resource.Status.ERROR, null,"Проверьте логин\\пароль")
         }
     }
 
     /** метод обновления состояния */
     fun updateAuthState() {
-        _authState.value = State(State.Status.LOADING, null, "")
+        _authResource.value = Resource(Resource.Status.LOADING, null, "")
     }
 
     /** метод обновления токенов досступа*/
@@ -87,10 +88,10 @@ class LoginViewModel @Inject constructor(
     fun checkTokens() = viewModelScope.launch {
         val accessToken = tokenManager.getAccessToken().first() ?: ""
         if(accessToken != "") {
-            _needAuth.value = State.success(false)
+            _needAuth.value = Resource.success(false)
         }
         else {
-            _needAuth.value = State.error("Необходима авторизация")
+            _needAuth.value = Resource.error("Необходима авторизация")
         }
     }
 

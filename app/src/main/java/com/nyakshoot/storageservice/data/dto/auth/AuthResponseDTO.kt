@@ -6,5 +6,7 @@ data class AuthResponseDTO (
     @SerializedName("access_token")
     val accessToken: String,
     @SerializedName("refresh_token")
-    val refreshToken: String
+    val refreshToken: String,
+    @SerializedName("type")
+    val tokenType: String
 )

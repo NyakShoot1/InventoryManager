@@ -20,12 +20,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.nyakshoot.storageservice.R
 import com.nyakshoot.storageservice.presentation.navigation.Screen
-import com.nyakshoot.storageservice.presentation.navigation.rememberNavigationState
 import com.nyakshoot.storageservice.utils.currentRoute
 
 @Composable
 fun ReceivingGoodsTopAppBar(navController: NavHostController) {
-    val navigationState = rememberNavigationState()
+
     //val navController = navigationState.navHostController
 //    val listItems = listOf(
 //        Screen.InputDeliveryData,

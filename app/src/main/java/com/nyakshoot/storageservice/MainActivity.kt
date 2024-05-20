@@ -7,22 +7,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import com.nyakshoot.storageservice.presentation.screens.main_screen_template.StorageServiceFragmentTemplate
 import com.nyakshoot.storageservice.ui.theme.StorageServiceTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)  {
         super.onCreate(savedInstanceState)
         setContent {
             StorageServiceTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
+               Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    StorageServiceFragmentTemplate()
+                    val navController = rememberNavController()
+                    StorageServiceFragmentTemplate(navController)
                 }
             }
         }

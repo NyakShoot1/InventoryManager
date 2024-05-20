@@ -17,7 +17,8 @@ import com.nyakshoot.storageservice.presentation.screens.main_menu.components.it
 @Composable
 fun MainMenuScreen(
     navController: NavController,
-    viewModel: MainMenuViewModel = hiltViewModel()) {
+    viewModel: MainMenuViewModel = hiltViewModel()
+) {
     viewModel.generateAvailableItems(navController)
 
     LazyColumn(

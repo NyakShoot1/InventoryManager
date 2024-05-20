@@ -1,4 +1,4 @@
-package com.nyakshoot.storageservice.data.remote
+package com.nyakshoot.storageservice.data.remote.clients
 
 import com.nyakshoot.storageservice.data.dto.user.UserDTO
 import com.nyakshoot.storageservice.utils.AppConstants.BASE_URL

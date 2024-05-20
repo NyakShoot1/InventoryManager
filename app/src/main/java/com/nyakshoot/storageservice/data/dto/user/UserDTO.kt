@@ -8,4 +8,5 @@ data class UserDTO(
     val avatarLink: String? = "",
     @SerializedName("user_name")
     val userName: String? = ""
+
 )

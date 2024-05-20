@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 fun MainMenuItem(item: MainMenuItemModel) {
     Card(
         modifier = Modifier
-            .clickable { item.onClickStartReceivingGoods() }
+            .clickable { item.onClickStart() }
             .padding(8.dp)
             .height(130.dp)
             .width(130.dp),

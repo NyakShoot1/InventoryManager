@@ -35,7 +35,7 @@ fun ProfileScreen(
     navController: NavController,
     viewModel: ProfileViewModel = hiltViewModel()) {
 
-    val meState by viewModel.meState.collectAsState() // состояние профиля
+    val meState by viewModel.meResource.collectAsState() // состояние профиля
 
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
         .fillMaxSize()

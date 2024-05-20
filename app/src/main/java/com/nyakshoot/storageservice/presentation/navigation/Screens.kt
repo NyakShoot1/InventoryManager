@@ -18,7 +18,10 @@ sealed class Screen(val title: String, val iconId: Int, val route: String){
     object DoneReceivingGoods: Screen("Готово", R.drawable.document_add,
         Destinations.DONE_RECEIVING_GOODS_ROUTE
     )
+    object ItemBase: Screen("База товаров", -1, Destinations.ITEM_BASE_ROUTE)
+    object ItemDetail: Screen("Товар...", -1, Destinations.ITEM_DETAIL_ROUTE)
 
+    object CreateMovement: Screen("Создать запрос на перемещение", -1, Destinations.CREATE_MOVEMENT_ROUTE)
 
 }
 
@@ -31,11 +34,16 @@ object Destinations {
     const val INPUT_DELIVERY_DATA_ROUTE = "input_delivery_data_screen"
     const val INPUT_GOODS_DATA_ROUTE = "input_goods_data_screen"
     const val DONE_RECEIVING_GOODS_ROUTE = "done_receiving_goods_screen"
+    const val ITEM_BASE_ROUTE = "item_base"
+    const val ITEM_DETAIL_ROUTE = "item_detail/{item}"
+
+    const val CREATE_MOVEMENT_ROUTE = "create_movement_screen"
 
     const val ORDER_ROUTE = "order"
     const val SHIPMENT_ROUTE = "shipment"
     const val SETTINGS_ROUTE = "settings"
     const val STATISTIC_ROUTE = "statistic"
     const val STORAGE_ROUTE = "storage"
+
     const val MAIN_ROUTE = "main"
 }

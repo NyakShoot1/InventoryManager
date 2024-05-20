@@ -9,7 +9,7 @@ import com.nyakshoot.storageservice.data.local.TokenManager
 import com.nyakshoot.storageservice.data.remote.toUser
 import com.nyakshoot.storageservice.domain.repository.IUserRepository
 import com.nyakshoot.storageservice.presentation.screens.profile.models.User
-import com.nyakshoot.storageservice.utils.State
+import com.nyakshoot.storageservice.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,8 +23,8 @@ class ProfileViewModel @Inject constructor(
 ): ViewModel() {
 
     // для выполнения авторизации
-    private val _meState = MutableStateFlow<State<User>>(State.loading(null))
-    val meState: StateFlow<State<User>> = _meState
+    private val _meResource = MutableStateFlow<Resource<User>>(Resource.loading(null))
+    val meResource: StateFlow<Resource<User>> = _meResource
 
     var profileState by mutableStateOf(ProfileState())
         private set
@@ -34,9 +34,9 @@ class ProfileViewModel @Inject constructor(
 
     private fun getUserInfo() = viewModelScope.launch {
         val meResponse = iUserRepository.getMe()
-        if(meResponse.status == State.Status.SUCCESS) {
+        if(meResponse.status == Resource.Status.SUCCESS) {
             val nonNullUser = meResponse.data?.toUser() ?: return@launch
-            _meState.value = State(meResponse.status, nonNullUser, meResponse.message)
+            _meResource.value = Resource(meResponse.status, nonNullUser, meResponse.message)
             profileState = profileState.copy(user = nonNullUser)
         }
     }
