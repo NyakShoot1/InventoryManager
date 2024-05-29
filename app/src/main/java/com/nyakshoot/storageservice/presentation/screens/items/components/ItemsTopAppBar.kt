@@ -1,4 +1,4 @@
-package com.nyakshoot.storageservice.presentation.screens.item_base.components
+package com.nyakshoot.storageservice.presentation.screens.items.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize

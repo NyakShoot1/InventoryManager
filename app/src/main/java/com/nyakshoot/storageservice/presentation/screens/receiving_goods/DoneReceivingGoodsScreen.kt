@@ -1,6 +1,7 @@
 package com.nyakshoot.storageservice.presentation.screens.receiving_goods
 
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,21 +17,28 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.nyakshoot.storageservice.presentation.navigation.Screen
 import com.nyakshoot.storageservice.presentation.screens.receiving_goods.view_models.DoneReceivingGoodsViewModel
+import com.nyakshoot.storageservice.utils.Resource
 
 @Composable
 fun DoneReceivingGoodsScreen(
     navController: NavHostController,
     viewModel: DoneReceivingGoodsViewModel = hiltViewModel()
 ) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -97,11 +105,11 @@ fun DoneReceivingGoodsScreen(
 
         Button(
             onClick = {
-
-                viewModel.createShipment()
-                navController.popBackStack()
-                navController.popBackStack()
-
+                try {
+                    viewModel.doShipmentRequest()
+                } catch (e: Exception) {
+                    Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                }
             },
             modifier = Modifier
                 .fillMaxWidth(),
@@ -111,5 +119,20 @@ fun DoneReceivingGoodsScreen(
             Text("Завершить", fontSize = 24.sp, color = Color.White)
         }
 
+    }
+    when (viewModel.doneRequestState.value.status) {
+        Resource.Status.SUCCESS -> {
+            Toast.makeText(context, "Успешно выполнено", Toast.LENGTH_SHORT).show()
+            val currentRoute = navBackStackEntry?.destination?.route
+            if (currentRoute == Screen.DoneReceivingGoods.route) {
+                navController.popBackStack(Screen.ReceivingGoods.route, inclusive = true)
+            }
+        }
+        Resource.Status.LOADING -> {
+//            Toast.makeText(context, "Выполняется..", Toast.LENGTH_SHORT).show()
+        }
+        Resource.Status.ERROR -> {
+            Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show()
+        }
     }
 }

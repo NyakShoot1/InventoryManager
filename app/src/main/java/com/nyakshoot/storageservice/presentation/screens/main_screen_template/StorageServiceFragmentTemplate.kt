@@ -24,7 +24,7 @@ import androidx.navigation.NavHostController
 import com.nyakshoot.storageservice.R
 import com.nyakshoot.storageservice.presentation.navigation.Screen
 import com.nyakshoot.storageservice.presentation.navigation.StorageServiceNavGraph
-import com.nyakshoot.storageservice.presentation.screens.item_base.components.ItemBaseTopAppBar
+import com.nyakshoot.storageservice.presentation.screens.items.components.ItemBaseTopAppBar
 import com.nyakshoot.storageservice.presentation.screens.main_menu.components.MainMenuTopAppBar
 import com.nyakshoot.storageservice.presentation.screens.receiving_goods.components.ReceivingGoodsNavigationBar
 import com.nyakshoot.storageservice.presentation.screens.receiving_goods.components.ReceivingGoodsTopAppBar

@@ -5,7 +5,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -23,6 +22,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,6 +36,11 @@ class InputDeliveryDataViewModel @Inject constructor(
 
     private fun updateUIState(update: InputDeliveryDataUIState.() -> InputDeliveryDataUIState) {
         _inputDeliveryDataUIState.value = _inputDeliveryDataUIState.value.update()
+    }
+
+    fun getCurrentDateTime(): String {
+        val dateFormat = SimpleDateFormat("dd_MM_yyyy__HH_mm_ss", Locale.getDefault())
+        return dateFormat.format(Date())
     }
 
     fun getSuppliers() = viewModelScope.launch {
@@ -53,9 +58,10 @@ class InputDeliveryDataViewModel @Inject constructor(
     }
 
 
-    fun getInfoState(){
+    fun getInfoState() {
 
     }
+
     fun addPhoto(photo: PhotoDTO) {
         updateUIState {
             photos.add(photo)
@@ -73,6 +79,7 @@ class InputDeliveryDataViewModel @Inject constructor(
             )
         }
     }
+
     @SuppressLint("Recycle")
     fun saveDeliveryData(context: Context) {
         val photosParts = _inputDeliveryDataUIState.value.photos.map { photoDTO ->
@@ -81,7 +88,7 @@ class InputDeliveryDataViewModel @Inject constructor(
             val requestBody = inputStream?.readBytes()?.toRequestBody("image/*".toMediaTypeOrNull())
             MultipartBody.Part.createFormData("photos", photoDTO.photoName, requestBody!!)
         }
-        Log.d("AAAAAAAAAAAAA", photosParts.toString())
+
         localReceivingDeliveryRepo.setDeliveryInfo(
             _inputDeliveryDataUIState.value.selectedSupplier.value,
             _inputDeliveryDataUIState.value.numberDocument.value,
@@ -90,31 +97,28 @@ class InputDeliveryDataViewModel @Inject constructor(
         )
     }
 
+    private val _currentPhotoUri = mutableStateOf<Uri?>(null)
+    val currentPhotoUri: State<Uri?> = _currentPhotoUri
 
+    // Остальной код вьюмодели...
+
+    fun takePhoto(context: Context) {
+        _currentPhotoUri.value = createImageFile(context)
+    }
 
     fun createImageFile(context: Context): Uri? {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-
-        // Указываем имя файла
-        val fileName = "JPEG_${timeStamp}_"
-
-        // Указываем тип файла
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.getDefault()).format(Date())
+        val randomSuffix = UUID.randomUUID().toString().substring(0, 4) // Генерируем случайный суффикс из UUID
+        val fileName = "JPEG_${timeStamp}_${randomSuffix}"
         val mimeType = "image/jpeg"
 
-        // Создаем contentValues для добавления файла в MediaStore
         val contentValues = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
             put(MediaStore.Images.Media.MIME_TYPE, mimeType)
             put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis() / 1000)
         }
 
-        // Создаем Uri для сохранения файла в MediaStore
         val contentResolver = context.contentResolver
-
-        // Возвращаем Uri
         return contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
     }
-
-
-
 }

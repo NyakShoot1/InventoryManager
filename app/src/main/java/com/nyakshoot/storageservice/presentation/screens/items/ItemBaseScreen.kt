@@ -1,9 +1,10 @@
-package com.nyakshoot.storageservice.presentation.screens.item_base
+package com.nyakshoot.storageservice.presentation.screens.items
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,7 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.gson.Gson
 import com.nyakshoot.storageservice.presentation.navigation.Screen
-import com.nyakshoot.storageservice.presentation.screens.item_base.components.ItemCard
+import com.nyakshoot.storageservice.presentation.screens.items.components.ItemCard
 import com.nyakshoot.storageservice.utils.Resource
 
 @Composable
@@ -42,14 +43,14 @@ fun ItemBaseScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(viewModel.inputItemDataUIState.value.items.data!!.size) { index ->
+                items(viewModel.inputItemDataUIState.value.items.data!!) { item ->
                     ItemCard(
-                        itemName = viewModel.inputItemDataUIState.value.items.data!![index].name,
-                        itemNumber = viewModel.inputItemDataUIState.value.items.data!![index].itemNumber!!,
-                        cost = viewModel.inputItemDataUIState.value.items.data!![index].cost!!
+                        itemName = item.name,
+                        itemNumber = item.itemNumber!!,
+                        cost = item.cost!!
                     ) {
                         val itemJson =
-                            Gson().toJson(viewModel.inputItemDataUIState.value.items.data!![index])
+                            Gson().toJson(item)
                         navController.navigate(Screen.ItemDetail.route.replace("{item}", itemJson))
                     }
                 }

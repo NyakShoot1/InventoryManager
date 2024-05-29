@@ -1,22 +1,19 @@
 package com.nyakshoot.storageservice.presentation.screens.receiving_goods.view_models
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.workDataOf
 import com.nyakshoot.storageservice.data.dto.item.ItemDTO
-import com.nyakshoot.storageservice.data.dto.position.PositionDTO
+import com.nyakshoot.storageservice.data.dto.position.PositionRequestDTO
 import com.nyakshoot.storageservice.data.dto.shipment.ShipmentCreateRequestDTO
 import com.nyakshoot.storageservice.data.local.LocalReceivingDeliveryRepo
+import com.nyakshoot.storageservice.domain.repository.IPhotoRepository
 import com.nyakshoot.storageservice.domain.repository.IPositionRepository
 import com.nyakshoot.storageservice.domain.repository.IShipmentRepository
 import com.nyakshoot.storageservice.presentation.screens.receiving_goods.ui_states.DoneReceivingGoodsUIState
-import com.nyakshoot.storageservice.work_manager.GlbUploadWorker
+import com.nyakshoot.storageservice.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -27,6 +24,7 @@ import kotlin.coroutines.cancellation.CancellationException
 class DoneReceivingGoodsViewModel @Inject constructor(
     private val iPositionRepository: IPositionRepository,
     private val iShipmentRepository: IShipmentRepository,
+    private val iPhotoRepository: IPhotoRepository,
     private val localReceivingDeliveryRepo: LocalReceivingDeliveryRepo
 ) : ViewModel() {
 
@@ -37,48 +35,40 @@ class DoneReceivingGoodsViewModel @Inject constructor(
         _doneReceivingGoodsUIState.value = _doneReceivingGoodsUIState.value.update()
     }
 
-    fun uploadPhotos(applicationContext: Context) {
-        val photos = getPhotos()
+    private val _doneRequestState = mutableStateOf(Resource.loading(false))
+    val doneRequestState: State<Resource<Boolean>> = _doneRequestState
 
-        val data = workDataOf("photos" to photos)
-
-        val workRequest = OneTimeWorkRequestBuilder<GlbUploadWorker>()
-            .setInputData(data)
-            .build()
-        // TODO создание shipment
-        WorkManager.getInstance(applicationContext).enqueue(workRequest)
-        val workRequestId = GlbUploadWorker.enqueueUpload(photos, applicationContext)
-        // Отслеживайте состояние задачи загрузки, как в предыдущем примере
-//        val workInfoFlow = WorkManager.getInstance(applicationContext)
-//            .getWorkInfoByIdLiveData(workRequestId)
-//            .asFlow()
-//            .map { workInfo ->
-//                if (workInfo != null && workInfo.state == WorkInfo.State.SUCCEEDED) {
-//                    val outputData = workInfo.outputData
-//                    val photoIds = outputData.getStringArray("photoIds")?.toList()
-//
-//                    if (photoIds != null) {
-//                        createShipment()
-//                    } else {
-//
-//                    }
-//                } else if (workInfo != null && workInfo.state == WorkInfo.State.RUNNING) {
-//
-//                } else {
-//
-//                }
-//            }
-//            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), )
+    private suspend fun uploadPhotos() {
+        val uploadPhotos = getPhotos()
+        for (photoBody in uploadPhotos) {
+            val list: List<MultipartBody.Part> = listOf(photoBody)
+            val newPhoto = iPhotoRepository.createPhoto(list)
+            if (newPhoto.status == Resource.Status.SUCCESS) {
+                newPhoto.data?.let { response ->
+                    updateUIState {
+                        photosIds.add(response.id)
+                        copy(photosIds = photosIds)
+                    }
+                }
+            } else {
+                Log.d("JOB_UPLOAD_PHOTO_GG", "Error uploading photo: ${newPhoto.toString()}")
+            }
+        }
+        Log.d("JOB_UPLOAD_PHOTO_GG", _doneReceivingGoodsUIState.value.photosIds.toString())
     }
 
-    fun createShipment() = viewModelScope.launch {
-        val positions: MutableList<PositionDTO> = mutableListOf()
-        for (item in getItems()) {
-            positions.add(PositionDTO(count = 1, itemId = item.id))
+
+    private suspend fun createShipment() {
+
+        Log.d("NICE", _doneReceivingGoodsUIState.value.photosIds.toString())
+        val items = getItems()
+        val positions: MutableList<PositionRequestDTO> = mutableListOf()
+        for (item in items) {
+            positions.add(PositionRequestDTO(1, itemId = item.id!!))
         }
 
         val newShipment = ShipmentCreateRequestDTO(
-            photos = getPhotos(),
+            photos = _doneReceivingGoodsUIState.value.photosIds,
             positions = positions,
             supplierName = getSupplierName(),
             documentNumber = getNumberDocument(),
@@ -87,13 +77,25 @@ class DoneReceivingGoodsViewModel @Inject constructor(
         )
 
         try {
-            iShipmentRepository.createShipment(newShipment)
+            val response = iShipmentRepository.createShipment(newShipment)
         } catch (ex: CancellationException) {
             Log.d("JOB_GG_CancellationException", ex.toString())
             throw ex // Must let the CancellationException propagate
         } catch (ex: Exception) {
             Log.d("JOB_GG", ex.toString())
             // Handle all other exceptions here
+        }
+    }
+
+    fun doShipmentRequest() = viewModelScope.launch {
+        _doneRequestState.value = Resource.loading()
+        try {
+            uploadPhotos()
+            createShipment()
+            _doneRequestState.value = Resource.success(true)
+        } catch (ex: Exception) {
+            _doneRequestState.value = Resource.error(ex.toString(), false)
+            Log.d("JOB_GG", ex.toString())
         }
     }
 

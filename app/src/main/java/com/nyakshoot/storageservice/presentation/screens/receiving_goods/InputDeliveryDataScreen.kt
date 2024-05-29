@@ -2,8 +2,8 @@ package com.nyakshoot.storageservice.presentation.screens.receiving_goods
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.icu.text.DateFormat
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -60,14 +60,15 @@ fun InputDeliveryDataScreen(
 ) {
     val context = LocalContext.current
 
-    val currentPhotoUri by remember { mutableStateOf(viewModel.createImageFile(context)) }
+    val currentPhotoUri by remember { viewModel.currentPhotoUri }
 
     val resultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
     ) { success ->
         if (success) {
             currentPhotoUri?.let { uri ->
-                viewModel.addPhoto(PhotoDTO(uri, "photo_${DateFormat.DAY}"))
+                Log.d("uri", uri.toString())
+                viewModel.addPhoto(PhotoDTO(uri, "photo_prihod_${viewModel.getCurrentDateTime()}.jpg"))
             }
         } else {
             Toast.makeText(context, "Ошибка при съемке фотографии", Toast.LENGTH_SHORT).show()
@@ -167,6 +168,7 @@ fun InputDeliveryDataScreen(
         TakePhotoItem("Добавить фото", R.drawable.camera_add) {
             Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
                 intent.resolveActivity(context.packageManager)?.let {
+                    viewModel.takePhoto(context) // Вызываем функцию для генерации нового URI при вызове камеры
                     resultLauncher.launch(currentPhotoUri!!)
                 }
             }

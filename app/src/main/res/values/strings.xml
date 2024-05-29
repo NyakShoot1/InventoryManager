@@ -3,18 +3,19 @@
 
     <string name="storage_label">Склад</string>
     <string name="storage_movement_label">Перемещения на складе</string>
-    <string name="get_delivery_label">Приёмка</string>
-    <string name="reports_label">Отчёты</string>
+    <string name="get_delivery_label">Складские операции</string>
+    <string name="statistic_label">Статистика</string>
     <string name="received_delivery">Принятые поставки</string>
     <string name="completed_orders">Выполненные отгрузки</string>
     <string name="goods_on_storage">Товары на складе</string>
-    <string name="phys_places_on_storage">Физ. места на складе</string>
+    <string name="phys_places_on_storage">Складские места</string>
     <string name="inside_storage_movement">Внутреннее</string>
     <string name="outside_storage_movement">Внешнее</string>
     <string name="requests_storage_movement">Запросы</string>
-    <string name="create_request_storage_movement">Новый запрос</string>
+    <string name="create_request_storage_movement">Запрос перемещения</string>
     <string name="get_delivery">Принять поставку</string>
     <string name="write_downs">Списание</string>
     <string name="goods_base">База товаров</string>
+    <string name="sales_statistics">Продажи</string>
 
 </resources>

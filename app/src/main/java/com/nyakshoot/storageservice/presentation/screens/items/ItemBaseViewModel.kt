@@ -1,4 +1,4 @@
-package com.nyakshoot.storageservice.presentation.screens.item_base
+package com.nyakshoot.storageservice.presentation.screens.items
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -23,19 +23,20 @@ class ItemBaseViewModel@Inject constructor(
     }
 
     fun getItems() = viewModelScope.launch {
-        updateUIState { copy(isLoading = true, items = Resource.loading()) }
-        try {
-            val response = iItemRepository.getItems()
-            if (response.data != null) {
-                updateUIState { copy(isLoading = false, items = Resource.success(response.data)) }
-            } else {
-                updateUIState { copy(isLoading = false, items = Resource.error("Failed to load items", null)) }
+        if (_inputItemDataUIState.value.items.status != Resource.Status.LOADING){
+            updateUIState { copy(isLoading = false, items = _inputItemDataUIState.value.items) }
+        }else {
+            updateUIState { copy(isLoading = true, items = Resource.loading()) }
+            try {
+                val response = iItemRepository.getItems()
+                if (response.data != null) {
+                    updateUIState { copy(isLoading = false, items = Resource.success(response.data)) }
+                } else {
+                    updateUIState { copy(isLoading = false, items = Resource.error("Failed to load items", null)) }
+                }
+            } catch (e: Exception) {
+                updateUIState { copy(isLoading = false, items = Resource.error("Error loading items", null)) }
             }
-        } catch (e: Exception) {
-            updateUIState { copy(isLoading = false, items = Resource.error("Error loading items", null)) }
         }
     }
-
-
-
 }

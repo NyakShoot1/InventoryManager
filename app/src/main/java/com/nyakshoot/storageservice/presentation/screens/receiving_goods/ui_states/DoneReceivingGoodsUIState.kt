@@ -12,6 +12,7 @@ data class DoneReceivingGoodsUIState (
     val date: String = getCurrentDateTime(),
     val storageAddress: String = "",
     val items: List<ItemDTO> = listOf(),
+    val photosIds: MutableList<Int> = mutableListOf(),
 )
 
 fun getCurrentDateTime(): String {

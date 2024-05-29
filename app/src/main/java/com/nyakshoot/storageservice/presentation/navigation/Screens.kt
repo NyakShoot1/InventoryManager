@@ -18,6 +18,12 @@ sealed class Screen(val title: String, val iconId: Int, val route: String){
     object DoneReceivingGoods: Screen("Готово", R.drawable.document_add,
         Destinations.DONE_RECEIVING_GOODS_ROUTE
     )
+
+    object DoneShipments: Screen("Поставки", -1, Destinations.DONE_SHIPMENTS_ROUTE)
+    object DoneShipmentDetail: Screen("Детали поставки", -1, Destinations.DONE_SHIPMENT_DETAIL_ROUTE)
+    object Positions: Screen("Позиции", -1, Destinations.DONE_SHIPMENT_DETAIL_ROUTE)
+
+    object Places: Screen("Места на складе", -1, Destinations.PLACES_ROUTE)
     object ItemBase: Screen("База товаров", -1, Destinations.ITEM_BASE_ROUTE)
     object ItemDetail: Screen("Товар...", -1, Destinations.ITEM_DETAIL_ROUTE)
 
@@ -30,6 +36,10 @@ object Destinations {
     const val MAIN_MENU_ROUTE = "main_menu_screen"
     const val PROFILE_ROUTE = "profile_screen"
 
+    const val DONE_SHIPMENTS_ROUTE = "done_shipments_screen"
+    const val DONE_SHIPMENT_DETAIL_ROUTE = "done_shipment_detail_screen"
+    const val POSITIONS_ROUTE = "positions_screen"
+    const val PLACES_ROUTE = "places_screen"
     const val RECEIVING_GOODS_ROUTE = "receiving_goods_screen"
     const val INPUT_DELIVERY_DATA_ROUTE = "input_delivery_data_screen"
     const val INPUT_GOODS_DATA_ROUTE = "input_goods_data_screen"

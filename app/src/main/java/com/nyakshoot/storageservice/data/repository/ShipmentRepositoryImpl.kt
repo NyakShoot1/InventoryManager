@@ -15,14 +15,13 @@ class ShipmentRepositoryImpl @Inject constructor(
     override suspend fun createShipment(newShipment: ShipmentCreateRequestDTO): Resource<ShipmentDTO> {
         return safeApiCall {
             iShipmentClient.createShipment(
-                newShipment.deliveryMan,
-                newShipment.supplierName,
-                newShipment.documentNumber,
-                newShipment.storageMan,
-                newShipment.positions,
-                newShipment.photos
+                newShipment
             )
         }
+    }
+
+    override suspend fun getDoneShipments(): Resource<List<ShipmentDTO>> {
+        return safeApiCall { iShipmentClient.getDoneShipments() }
     }
 
 }

@@ -6,4 +6,6 @@ import com.nyakshoot.storageservice.utils.Resource
 
 interface IShipmentRepository {
     suspend fun createShipment(newShipment: ShipmentCreateRequestDTO): Resource<ShipmentDTO>
+
+    suspend fun getDoneShipments(): Resource<List<ShipmentDTO>>
 }

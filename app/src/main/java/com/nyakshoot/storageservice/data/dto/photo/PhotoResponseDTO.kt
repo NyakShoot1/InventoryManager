@@ -9,5 +9,5 @@ data class PhotoResponseDTO(
     @SerializedName("photo_bucket_name")
     val photoBucketName: String,
     @SerializedName("shipment_id")
-    val shipmentId: Int,
+    val shipmentId: Int? = null,
 )

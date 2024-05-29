@@ -1,4 +1,4 @@
-package com.nyakshoot.storageservice.presentation.screens.item_base
+package com.nyakshoot.storageservice.presentation.screens.items
 
 import com.nyakshoot.storageservice.data.dto.item.ItemDTO
 import com.nyakshoot.storageservice.utils.Resource

@@ -1,14 +1,13 @@
 package com.nyakshoot.storageservice.data.dto.shipment
 
 import com.google.gson.annotations.SerializedName
-import com.nyakshoot.storageservice.data.dto.position.PositionDTO
-import okhttp3.MultipartBody
+import com.nyakshoot.storageservice.data.dto.position.PositionRequestDTO
 
 data class ShipmentCreateRequestDTO(
-    @SerializedName("photos")
-    val photos: List<MultipartBody.Part>,
+    @SerializedName("photos_id")
+    val photos: List<Int>,
     @SerializedName("new_positions")
-    val positions: List<PositionDTO>,
+    val positions: List<PositionRequestDTO>,
     @SerializedName("supplier_name")
     val supplierName: String,
     @SerializedName("document_number")

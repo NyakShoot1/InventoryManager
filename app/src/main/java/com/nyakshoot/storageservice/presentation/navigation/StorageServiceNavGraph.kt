@@ -8,11 +8,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.gson.Gson
 import com.nyakshoot.storageservice.data.dto.item.ItemDTO
-import com.nyakshoot.storageservice.presentation.screens.item_base.ItemBaseScreen
+import com.nyakshoot.storageservice.data.dto.shipment.ShipmentDTO
+import com.nyakshoot.storageservice.presentation.screens.done_shipment_detail.DoneShipmentDetailScreen
+import com.nyakshoot.storageservice.presentation.screens.done_shipments.DoneShipmentsScreen
 import com.nyakshoot.storageservice.presentation.screens.item_detail.ItemDetailScreen
+import com.nyakshoot.storageservice.presentation.screens.items.ItemBaseScreen
 import com.nyakshoot.storageservice.presentation.screens.login.LoginScreen
 import com.nyakshoot.storageservice.presentation.screens.main_menu.MainMenuScreen
 import com.nyakshoot.storageservice.presentation.screens.movement_create.CreateMovementScreen
+import com.nyakshoot.storageservice.presentation.screens.places.PlacesScreen
+import com.nyakshoot.storageservice.presentation.screens.positions.PositionsScreen
 import com.nyakshoot.storageservice.presentation.screens.profile.ProfileScreen
 import com.nyakshoot.storageservice.presentation.screens.receiving_goods.navigation.receivingGoodsNavGraph
 
@@ -32,6 +37,25 @@ fun StorageServiceNavGraph(
         }
         composable(Screen.Profile.route) {
             ProfileScreen(navController = navController)
+        }
+        composable(Screen.DoneShipments.route){
+            DoneShipmentsScreen(navController = navController)
+        }
+        composable(Screen.DoneShipmentDetail.route,
+            arguments = listOf(
+                navArgument("shipment"){ type = NavType.StringType}
+            )
+        ) {
+            it.arguments?.getString("shipment")?.let {json ->
+                val shipment = Gson().fromJson(json, ShipmentDTO::class.java)
+                DoneShipmentDetailScreen(navController = navController, shipment)
+            }
+        }
+        composable(Screen.Positions.route){
+            PositionsScreen()
+        }
+        composable(Screen.Places.route){
+            PlacesScreen()
         }
         composable(Screen.ItemBase.route) {
             ItemBaseScreen(navController = navController)

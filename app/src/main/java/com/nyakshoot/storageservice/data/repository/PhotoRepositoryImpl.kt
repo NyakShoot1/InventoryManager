@@ -11,7 +11,7 @@ import javax.inject.Inject
 class PhotoRepositoryImpl @Inject constructor(
     private val iPhotoClient: IPhotoClient
 ) : AbstractBaseClient(), IPhotoRepository {
-    override suspend fun createPhotos(photos: List<MultipartBody.Part>): Resource<List<PhotoResponseDTO>> {
-        return safeApiCall { iPhotoClient.createPhotos(photos) }
+    override suspend fun createPhoto(photo: List<MultipartBody.Part>): Resource<PhotoResponseDTO> {
+        return safeApiCall { iPhotoClient.createPhoto(photo) }
     }
 }

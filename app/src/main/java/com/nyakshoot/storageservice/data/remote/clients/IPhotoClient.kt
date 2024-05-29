@@ -11,9 +11,9 @@ import retrofit2.http.Part
 interface IPhotoClient {
 
     @Multipart
-    @POST("${AppConstants.BASE_URL}photo/create_photos/")
-    suspend fun createPhotos(
+    @POST("${AppConstants.BASE_URL}photo/create_photo/")
+    suspend fun createPhoto(
         @Part photos: List<MultipartBody.Part>,
-    ): Response<List<PhotoResponseDTO>>
+    ): Response<PhotoResponseDTO>
 
 }
