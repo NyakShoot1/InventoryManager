@@ -18,13 +18,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.google.gson.Gson
+import com.nyakshoot.storageservice.presentation.navigation.Screen
 import com.nyakshoot.storageservice.presentation.screens.positions.components.FilterPositionsButton
 import com.nyakshoot.storageservice.presentation.screens.positions.components.PositionCard
 import com.nyakshoot.storageservice.utils.Resource
 
 @Composable
 fun PositionsScreen(
-    viewModel: PositionsViewModel = hiltViewModel()
+    viewModel: PositionsViewModel = hiltViewModel(),
+    navController: NavHostController
 ) {
     val selectedFilter = remember { mutableStateOf("Все") }
     val context = LocalContext.current
@@ -80,7 +84,9 @@ fun PositionsScreen(
                 ) {
                     items(viewModel.positionsUIState.value.filteredPositions) { position ->
                         PositionCard(position) {
-
+                            val positionIdJson =
+                                Gson().toJson(position.id)
+                            navController.navigate(Screen.PositionSetPlace.route.replace("{positionId}", positionIdJson))
                         }
                     }
                 }

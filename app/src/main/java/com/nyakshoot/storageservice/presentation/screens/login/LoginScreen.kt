@@ -95,7 +95,7 @@ fun LoginScreen(
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = "Склад+",
+            text = "СкладПлюс",
             color = MaterialTheme.colors.primary,
             fontSize = 24.sp
         )

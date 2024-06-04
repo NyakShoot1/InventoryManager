@@ -2,7 +2,9 @@ package com.nyakshoot.storageservice.di
 
 import com.google.gson.Gson
 import com.nyakshoot.storageservice.data.remote.clients.IAuthClient
+import com.nyakshoot.storageservice.data.remote.clients.IDocumentClient
 import com.nyakshoot.storageservice.data.remote.clients.IItemClient
+import com.nyakshoot.storageservice.data.remote.clients.IMovementClient
 import com.nyakshoot.storageservice.data.remote.clients.IPhotoClient
 import com.nyakshoot.storageservice.data.remote.clients.IPlaceClient
 import com.nyakshoot.storageservice.data.remote.clients.IPositionClient
@@ -12,7 +14,9 @@ import com.nyakshoot.storageservice.data.remote.clients.ISupplierClient
 import com.nyakshoot.storageservice.data.remote.clients.IUserClient
 import com.nyakshoot.storageservice.data.remote.interceptor.AuthInterceptor
 import com.nyakshoot.storageservice.data.repository.AuthRepositoryImpl
+import com.nyakshoot.storageservice.data.repository.DocumentRepositoryImpl
 import com.nyakshoot.storageservice.data.repository.ItemRepositoryImpl
+import com.nyakshoot.storageservice.data.repository.MovementRepositoryImpl
 import com.nyakshoot.storageservice.data.repository.PhotoRepositoryImpl
 import com.nyakshoot.storageservice.data.repository.PlaceRepositoryImpl
 import com.nyakshoot.storageservice.data.repository.PositionRepositoryImpl
@@ -21,7 +25,9 @@ import com.nyakshoot.storageservice.data.repository.StorageRepositoryImpl
 import com.nyakshoot.storageservice.data.repository.SupplierRepositoryImpl
 import com.nyakshoot.storageservice.data.repository.UserRepositoryImpl
 import com.nyakshoot.storageservice.domain.repository.IAuthRepository
+import com.nyakshoot.storageservice.domain.repository.IDocumentRepository
 import com.nyakshoot.storageservice.domain.repository.IItemRepository
+import com.nyakshoot.storageservice.domain.repository.IMovementRepository
 import com.nyakshoot.storageservice.domain.repository.IPhotoRepository
 import com.nyakshoot.storageservice.domain.repository.IPlaceRepository
 import com.nyakshoot.storageservice.domain.repository.IPositionRepository
@@ -148,4 +154,22 @@ object RemoteModule {
     @Singleton
     fun providerStorageRepositoryInterface(iStorageClient: IStorageClient): IStorageRepository =
         StorageRepositoryImpl(iStorageClient)
+
+    @Provides
+    @Singleton
+    fun provideMovementClient(retrofit: Retrofit): IMovementClient = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun providerMovementRepositoryInterface(iMovementClient: IMovementClient): IMovementRepository =
+        MovementRepositoryImpl(iMovementClient)
+
+    @Provides
+    @Singleton
+    fun provideDocumentClient(retrofit: Retrofit): IDocumentClient = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun providerDocumentRepositoryInterface(iDocumentClient: IDocumentClient): IDocumentRepository =
+        DocumentRepositoryImpl(iDocumentClient)
 }

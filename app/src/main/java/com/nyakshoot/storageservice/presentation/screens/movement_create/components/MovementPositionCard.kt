@@ -42,7 +42,7 @@ fun MovementPositionCard(
                     text = "- ${position.item.name} (${position.count})",
                     style = MaterialTheme.typography.body1
                 )
-            } ?: Text("Нет товаров на этом месте")
+            }
         }
     }
 }

@@ -3,11 +3,7 @@ package com.nyakshoot.storageservice.presentation.screens.main_screen_template
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.DrawerValue
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
@@ -16,16 +12,14 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.nyakshoot.storageservice.R
 import com.nyakshoot.storageservice.presentation.navigation.Screen
 import com.nyakshoot.storageservice.presentation.navigation.StorageServiceNavGraph
 import com.nyakshoot.storageservice.presentation.screens.items.components.ItemBaseTopAppBar
 import com.nyakshoot.storageservice.presentation.screens.main_menu.components.MainMenuTopAppBar
+import com.nyakshoot.storageservice.presentation.screens.main_screen_template.components.DefaultTopAppBar
 import com.nyakshoot.storageservice.presentation.screens.receiving_goods.components.ReceivingGoodsNavigationBar
 import com.nyakshoot.storageservice.presentation.screens.receiving_goods.components.ReceivingGoodsTopAppBar
 import com.nyakshoot.storageservice.utils.currentRoute
@@ -50,6 +44,15 @@ fun StorageServiceFragmentTemplate(
 
                 Screen.Profile.route -> ReceivingGoodsTopAppBar(navController)
                 Screen.ItemBase.route -> ItemBaseTopAppBar()
+                Screen.DoneShipments.route -> DefaultTopAppBar(navController = navController, title = Screen.DoneShipments.title)
+                Screen.DoneShipmentDetail.route -> DefaultTopAppBar(navController = navController, title = Screen.DoneShipmentDetail.title)
+                Screen.Positions.route -> DefaultTopAppBar(navController = navController, title = Screen.Positions.title)
+                Screen.PositionSetPlace.route -> DefaultTopAppBar(navController = navController, title = Screen.PositionSetPlace.title)
+                Screen.PositionSetPlace.route -> DefaultTopAppBar(navController = navController, title = Screen.PositionSetPlace.title)
+                Screen.Places.route -> DefaultTopAppBar(navController = navController, title = Screen.Places.title)
+                Screen.ItemDetail.route -> DefaultTopAppBar(navController = navController, title = Screen.ItemDetail.title)
+                Screen.CreateMovement.route -> DefaultTopAppBar(navController = navController, title = Screen.CreateMovement.title)
+                Screen.MovementRequests.route -> DefaultTopAppBar(navController = navController, title = Screen.MovementRequests.title)
             }
 
         },
@@ -72,23 +75,23 @@ fun StorageServiceFragmentTemplate(
             }
         },
         floatingActionButton = {
-            when (currentRoute(navController)) {
-                Screen.InputGoodsData.route ->
-                    IconButton(
-                        onClick = {
-                            //TODO
-                        },
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .padding(end = 5.dp)
-                                .size(80.dp),
-                            painter = painterResource(id = R.drawable.scanner),
-                            contentDescription = null,
-                            tint = MaterialTheme.colors.secondary
-                        )
-                    }
-            }
+//            when (currentRoute(navController)) {
+//                Screen.InputGoodsData.route ->
+//                    IconButton(
+//                        onClick = {
+//                            //TODO
+//                        },
+//                    ) {
+//                        Icon(
+//                            modifier = Modifier
+//                                .padding(end = 5.dp)
+//                                .size(80.dp),
+//                            painter = painterResource(id = R.drawable.scanner),
+//                            contentDescription = null,
+//                            tint = MaterialTheme.colors.secondary
+//                        )
+//                    }
+//            }
         }
     ) {
         Column(

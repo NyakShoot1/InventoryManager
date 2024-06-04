@@ -81,7 +81,10 @@ class MainMenuViewModel @Inject constructor(
             MainMenuItemModel(
                 label = R.string.requests_storage_movement,
                 iconId = R.drawable.logistics_delivery_truck
-            ) { Log.d("${R.string.requests_storage_movement}", "Кнопка нажата") },
+            ) {
+                navController.navigate(Screen.MovementRequests.route)
+                Log.d("${R.string.requests_storage_movement}", "Кнопка нажата")
+              },
         )
     }
 
@@ -98,6 +101,13 @@ class MainMenuViewModel @Inject constructor(
                 iconId = R.drawable.logistics_truck
             ) {
                 navController.navigate(Screen.CreateMovement.route)
+                Log.d("${R.string.create_request_storage_movement}", "Кнопка нажата")
+            },
+            MainMenuItemModel(
+                label = R.string.delivery,
+                iconId = R.drawable.delivery_svgrepo_com
+            ) {
+
                 Log.d("${R.string.create_request_storage_movement}", "Кнопка нажата")
             },
             MainMenuItemModel(

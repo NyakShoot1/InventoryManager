@@ -14,4 +14,8 @@ class PhotoRepositoryImpl @Inject constructor(
     override suspend fun createPhoto(photo: List<MultipartBody.Part>): Resource<PhotoResponseDTO> {
         return safeApiCall { iPhotoClient.createPhoto(photo) }
     }
+
+    override suspend fun getPhotoURL(photoId: Int): Resource<String> {
+        return safeApiCall { iPhotoClient.getPhotoURL(photoId) }
+    }
 }

@@ -1,7 +1,8 @@
 package com.nyakshoot.storageservice.presentation.screens.movement_create
 
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,19 +11,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nyakshoot.storageservice.data.dto.place.PlaceWithPositionsDTO
+import com.nyakshoot.storageservice.presentation.navigation.Screen
 import com.nyakshoot.storageservice.presentation.screens.movement_create.components.FilterMovementCreateButton
 import com.nyakshoot.storageservice.presentation.screens.movement_create.components.MovementPositionCard
 import com.nyakshoot.storageservice.presentation.screens.movement_create.components.StorageCard
@@ -34,7 +37,7 @@ fun CreateMovementScreen(
     viewModel: MovementCreateViewModel = hiltViewModel()
 ) {
     val selectedFilter = remember { mutableStateOf("Внутреннее") }
-    val unavailablePlaces = remember { mutableStateListOf<PlaceWithPositionsDTO>() }
+    val unavailablePlaces = remember { mutableStateOf<PlaceWithPositionsDTO?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.getPlaces(1)
@@ -67,35 +70,34 @@ fun CreateMovementScreen(
                     viewModel.movementCreateUIState.value.wherePlaces.status == Resource.Status.SUCCESS &&
                     viewModel.movementCreateUIState.value.whereStorages.status == Resource.Status.SUCCESS -> {
                 Column {
-                    Text(modifier = Modifier.padding(start = 10.dp),text = "Откуда: ")
+                    Text(modifier = Modifier.padding(start = 10.dp), text = "Откуда: ")
                     LazyColumn(
                         modifier = Modifier.weight(1f)
                     ) {
                         items(viewModel.movementCreateUIState.value.fromPlaces.data!!) { place ->
-                            Log.d("P", place.toString())
                             MovementPositionCard(
                                 place = place,
-                                isSelected = viewModel.movementCreateUIState.value.selectedFromPlaces.contains(place),
+                                isSelected = viewModel.movementCreateUIState.value.selectedFromPlace.value == place,
                                 onSelected = {
                                     if (it) {
-                                        viewModel.addSelectedFromPlace(place)
-                                        unavailablePlaces.add(place)
+                                        viewModel.setSelectedFromPlace(place)
+                                        unavailablePlaces.value = place
                                     } else {
-                                        viewModel.deleteSelectedFromPlaces(place)
-                                        unavailablePlaces.remove(place)
+                                        viewModel.setSelectedFromPlace(null)
+                                        unavailablePlaces.value = null
                                     }
                                 }
                             )
                         }
                     }
-                    Text(modifier = Modifier.padding(start = 10.dp),text = "Куда: ")
+                    Text(modifier = Modifier.padding(start = 10.dp), text = "Куда: ")
                     if (selectedFilter.value == "Внутреннее") {
                         LazyColumn(
                             modifier = Modifier.weight(1f)
                         ) {
                             items(
                                 viewModel.movementCreateUIState.value.wherePlaces.data
-                                    ?.filter { !unavailablePlaces.contains(it) }
+                                    ?.filter { it != unavailablePlaces.value }
                                     ?: emptyList()
                             ) { place ->
                                 MovementPositionCard(
@@ -136,7 +138,7 @@ fun CreateMovementScreen(
 
                     Button(
                         onClick = {
-                            // Выполнить перемещение
+                            viewModel.createNewMovement()
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -148,8 +150,24 @@ fun CreateMovementScreen(
             }
 
             else -> {
-                // Отображение индикатора загрузки
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
             }
         }
+    }
+    val context = LocalContext.current
+    when (viewModel.doneRequestState.value.status){
+        Resource.Status.SUCCESS -> {
+            Toast.makeText(context, "Успешно выполнено", Toast.LENGTH_SHORT).show()
+            navController.popBackStack(Screen.CreateMovement.route, inclusive = true)
+        }
+        Resource.Status.ERROR -> {
+            Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show()
+        }
+        Resource.Status.LOADING -> { }
     }
 }

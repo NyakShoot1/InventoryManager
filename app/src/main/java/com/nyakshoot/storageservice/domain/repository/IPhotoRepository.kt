@@ -7,4 +7,5 @@ import okhttp3.MultipartBody
 interface IPhotoRepository {
     suspend fun createPhoto(photo: List<MultipartBody.Part>): Resource<PhotoResponseDTO>
 
+    suspend fun getPhotoURL(photoId: Int): Resource<String>
 }

@@ -1,9 +1,7 @@
 package com.nyakshoot.storageservice.presentation.screens.movement_create
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.nyakshoot.storageservice.data.dto.place.PlaceWithPositionsDTO
 import com.nyakshoot.storageservice.data.dto.storage.StorageDTO
 import com.nyakshoot.storageservice.utils.Resource
@@ -14,7 +12,7 @@ data class MovementCreateUIState (
     val fromPlaces: Resource<List<PlaceWithPositionsDTO>> = Resource.loading(),
     val wherePlaces: Resource<List<PlaceWithPositionsDTO>> = Resource.loading(),
     val whereStorages: Resource<List<StorageDTO>> = Resource.loading(),
-    val selectedFromPlaces: SnapshotStateList<PlaceWithPositionsDTO> = mutableStateListOf(),
+    val selectedFromPlace: MutableState<PlaceWithPositionsDTO?> = mutableStateOf(null),
     val selectedWherePlace: MutableState<PlaceWithPositionsDTO?> = mutableStateOf(null),
     val selectedWhereStorage: MutableState<StorageDTO?> = mutableStateOf(null)
 )

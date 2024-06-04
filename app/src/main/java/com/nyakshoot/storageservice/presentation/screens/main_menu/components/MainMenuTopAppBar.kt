@@ -50,7 +50,7 @@ fun MainMenuTopAppBar(scaffoldState: ScaffoldState) {
             title = {
                 Text(
                     textAlign = TextAlign.Center,
-                    text = "InventoryManager",
+                    text = "СкладПлюс",
                     color = MaterialTheme.colors.secondary,
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold

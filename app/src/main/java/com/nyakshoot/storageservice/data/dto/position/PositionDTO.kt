@@ -2,7 +2,7 @@ package com.nyakshoot.storageservice.data.dto.position
 
 import com.google.gson.annotations.SerializedName
 
-data class PositionDTO(
+data class  PositionDTO(
     val id: Int? = null,
     @SerializedName("count")
     val count: Int?,

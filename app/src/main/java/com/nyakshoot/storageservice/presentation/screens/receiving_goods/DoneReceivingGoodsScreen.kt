@@ -58,7 +58,7 @@ fun DoneReceivingGoodsScreen(
                 Text("Номер накладной: ${viewModel.getNumberDocument()}", fontSize = 15.sp)
                 Text("Отпуск груза разрешил: ${viewModel.getDeliveryMan()}", fontSize = 15.sp)
                 Text("Дата: ${viewModel.getTimeNow()}", fontSize = 15.sp)
-                Text("Склад: ", fontSize = 15.sp)
+                Text("Склад #1", fontSize = 15.sp)
             }
         }
 
@@ -73,7 +73,7 @@ fun DoneReceivingGoodsScreen(
             Column {
                 Text("ИТОГО: ", fontSize = 15.sp)
                 Text("Кол-во товаров: ${viewModel.getItems().size}", fontSize = 15.sp)
-                Text("Общая стоимость: 1000 руб.", fontSize = 15.sp)
+                Text("Общая стоимость: 160 руб.", fontSize = 15.sp)
             }
         }
 
@@ -122,7 +122,7 @@ fun DoneReceivingGoodsScreen(
     }
     when (viewModel.doneRequestState.value.status) {
         Resource.Status.SUCCESS -> {
-            Toast.makeText(context, "Успешно выполнено", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "Успешно выполнено", Toast.LENGTH_SHORT).show()
             val currentRoute = navBackStackEntry?.destination?.route
             if (currentRoute == Screen.DoneReceivingGoods.route) {
                 navController.popBackStack(Screen.ReceivingGoods.route, inclusive = true)

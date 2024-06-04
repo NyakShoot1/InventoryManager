@@ -29,8 +29,7 @@ fun PositionCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
-            .clickable { onClick() },
+            .padding(8.dp),
         shape = RoundedCornerShape(10.dp),
         backgroundColor = Color(0xFFF2F2F2)
     ) {
@@ -51,13 +50,15 @@ fun PositionCard(
                 Text(text = "Код места: ${position.place?.placeCode?: "-"}", fontSize = 12.sp)
                 Text(text = "Номер места: ${position.place?.placeNumber?: "-"}", fontSize = 12.sp)
             }
-            Image(
-                painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                contentDescription = "Arrow",
-                modifier = Modifier
-                    .padding(start = 8.dp)
-                    .size(50.dp)
-            )
+            if (position.place == null)
+                Image(
+                    painter = painterResource(id = R.drawable.baseline_add_home_24),
+                    contentDescription = "Arrow",
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .size(50.dp)
+                        .clickable { onClick() }
+                )
         }
     }
 }

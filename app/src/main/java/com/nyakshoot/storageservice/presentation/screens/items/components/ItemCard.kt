@@ -54,7 +54,7 @@ fun ItemCard(itemName: String, itemNumber: Int, cost: Number, onClick: () -> Uni
             ) {
                 Text(text = "Наименование: $itemName", fontSize = 12.sp)
                 Text(text = "Артикул: $itemNumber", fontSize = 12.sp)
-                Text(text = "Категория: ", fontSize = 12.sp)
+//                Text(text = "Категория: ", fontSize = 12.sp)
             }
             Image(
                 painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
