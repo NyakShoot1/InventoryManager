@@ -28,7 +28,7 @@ sealed class Screen(val title: String, val iconId: Int, val route: String){
     object ItemBase: Screen("База товаров", -1, Destinations.ITEM_BASE_ROUTE)
     object ItemDetail: Screen("Детали товара", -1, Destinations.ITEM_DETAIL_ROUTE)
 
-    object MovementRequests: Screen("Активные запросы", -1, Destinations.MOVEMENT_REQUEST_ROUTE)
+    object MovementRequests: Screen("Активные з апросы", -1, Destinations.MOVEMENT_REQUEST_ROUTE)
 
     object CreateMovement: Screen("Новый запрос", -1, Destinations.CREATE_MOVEMENT_ROUTE)
 
